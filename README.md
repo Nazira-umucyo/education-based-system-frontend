@@ -225,4 +225,93 @@ HelloApplication.showMainView();    // navigate to main screen after login
 
 ---
 
+## Prerequisites
 
+| Requirement | Version |
+|---|---|
+| Java (JDK) | 21 or higher |
+| Maven | 3.8 or higher |
+| IDE (recommended) | IntelliJ IDEA |
+
+---
+
+## Dependencies
+
+Declared in `pom.xml`:
+
+| Library | Version | Purpose |
+|---|---|---|
+| javafx-controls | 21 | Core UI widgets (Button, TextField, TableView, etc.) |
+| javafx-fxml | 21 | FXML loader for layout files |
+| javafx-media | 21 | Media support |
+| controlsfx | 11.2.1 | Extended JavaFX controls |
+| formsfx-core | 11.6.0 | Form building utilities |
+| bootstrapfx-core | 0.4.0 | Bootstrap-inspired CSS styles |
+| junit-jupiter-api | 5.10.2 | Unit testing (test scope) |
+| junit-jupiter-engine | 5.10.2 | Unit test runner (test scope) |
+
+---
+
+## How to Run
+
+**Option 1 — IntelliJ IDEA**
+1. Open the project folder in IntelliJ IDEA.
+2. Let Maven download dependencies automatically.
+3. Run `HelloApplication.java` (right-click → Run).
+
+**Option 2 — Maven command line**
+```bash
+mvn clean javafx:run
+```
+
+**Option 3 — Maven wrapper (no Maven installation required)**
+```bash
+# Windows
+mvnw.cmd clean javafx:run
+
+# Linux / Mac
+./mvnw clean javafx:run
+```
+
+---
+
+## Backend File Structure
+
+```
+src/main/java/com/nelly/education_based/
+│
+├── entities/
+│   ├── Person.java          # Abstract base class (id, name, email)
+│   ├── Student.java         # Extends Person — major, GPA, enrollments
+│   ├── Instructor.java      # Extends Person — assigned courses
+│   ├── Course.java          # Course code, name, credits, capacity
+│   ├── Enrollment.java      # Links Student ↔ Course, holds grade & status
+│   └── User.java            # Login user (username, password, role)
+│
+├── services/
+│   ├── GenericRepository.java   # In-memory generic store (add, find, remove)
+│   ├── Repository.java          # Repository interface
+│   ├── StudentService.java      # Register, get, remove, filter students
+│   ├── CourseService.java       # Register, get, remove, filter courses
+│   ├── EnrollmentService.java   # Enroll, drop, assign grade, query enrollments
+│   └── UserService.java         # Login, logout, current user
+│
+└── exceptions/
+    ├── UniversitySystemException.java    # Base exception
+    ├── StudentNotFoundException.java
+    ├── CourseNotFoundException.java
+    ├── DuplicateEnrollmentException.java
+    ├── InvalidGradeException.java
+    └── NotEnrolledException.java
+```
+
+---
+
+## Data Flow
+
+```
+FXML Layout  →  Controller (event handler)  →  Service  →  Repository (in-memory)
+                     ↑ validation here            ↑ business rules here
+```
+
+All data is stored in memory — there is no database. Data resets every time the application is restarted.
